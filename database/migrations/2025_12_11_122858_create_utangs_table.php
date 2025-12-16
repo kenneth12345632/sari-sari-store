@@ -10,16 +10,13 @@ return new class extends Migration
     {
         Schema::create('utangs', function (Blueprint $table) {
             $table->id();
-
             $table->unsignedBigInteger('customer_id');
             $table->string('item_name');
             $table->decimal('amount', 10, 2);
             $table->date('due_date')->nullable();
             $table->enum('status', ['unpaid', 'paid'])->default('unpaid');
-
             $table->timestamps();
 
-            // Foreign key
             $table->foreign('customer_id')
                 ->references('id')
                 ->on('customers')
