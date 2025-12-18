@@ -25,14 +25,13 @@ Route::resource('customers', CustomerController::class)
 // UTANGS (DEBTS)
 Route::get('/utangs', [UtangController::class, 'index'])->name('utangs.index');
 Route::post('/utangs', [UtangController::class, 'store'])->name('utangs.store');
-Route::patch('/utangs/{utang}', [UtangController::class, 'update'])->name('utangs.update');
 
 // Extra UTANG Actions
-Route::post('/utangs/{utang}/remind', [UtangController::class, 'sendReminder'])->name('utangs.remind');
-Route::post('/utangs/{utang}/paid', [UtangController::class, 'markPaid'])->name('utangs.paid');
+Route::post('/utangs/{id}/paid', [UtangController::class, 'paid'])->name('utangs.paid');
+Route::post('/utangs/partial-payment', [UtangController::class, 'partialPayment'])->name('utangs.partialPayment');
 
 // UTANG History
-Route::get('/utangs/history/{customer}', [UtangController::class, 'history'])
+Route::get('/utangs/history/{customerId}', [UtangController::class, 'history'])
     ->name('utangs.history');
 
 // SUGGESTIONS
