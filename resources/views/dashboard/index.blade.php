@@ -50,22 +50,64 @@
                         <th class="p-3">Recommendation</th>
                     </tr>
                 </thead>
-                <tbody class="text-center">
-                    @foreach($suggestions as $s)
-                    <tr class="border-t hover:bg-gray-50">
-                        <td class="p-3">{{ $s->name }}</td>
-                        <td class="p-3">{{ $s->recent_sales ?? 0 }}</td>
-                        <td class="p-3 font-semibold 
-                            {{ $s->recommended_order > 0 ? 'text-red-600' : 'text-green-600' }}">
-                            {{ $s->recommended_order > 0 ? "Order $s->recommended_order pcs" : "No need" }}
-                        </td>
-                    </tr>
-                    @endforeach
+                <tbody>
+                    @forelse($suggestions as $s)
+                        <tr class="border-t hover:bg-gray-50">
+                            <td class="p-3">{{ $s->name }}</td>
+                            <td class="p-3">{{ $s->recent_sales ?? 0 }}</td>
+                            <td class="p-3 font-semibold
+                                {{ $s->recommended_order > 0 ? 'text-red-600' : 'text-green-600' }}">
+                                {{ $s->recommended_order > 0
+                                    ? "Order {$s->recommended_order} pcs"
+                                    : "No need" }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="3" class="p-4 text-gray-500">
+                                No purchase suggestions available
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
     </div>
 
 </div>
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const labels = JSON.parse('{!! json_encode($labels ?? []) !!}');
+    const data = JSON.parse('{!! json_encode($data ?? []) !!}');
+
+    const ctx = document.getElementById('salesChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Weekly Sales (₱)',
+                data: data,
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+</script>
 
 @endsection
